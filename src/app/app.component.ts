@@ -35,7 +35,7 @@ export class AppComponent implements OnInit {
   applyFilter(event: Event) {
     this.filterValue = (event.target as HTMLInputElement).value;
     this.usersFilter = this.users.filter(x=>
-      x.name.toLowerCase().includes(this.filterValue.trim().toLowerCase())
+      x.name.toLowerCase().includes(this.filterValue.toLowerCase()) 
     )
   }
   ngOnInit(): void {
@@ -44,7 +44,7 @@ export class AppComponent implements OnInit {
       this.users = items;
       if(this.filterValue){
         this.usersFilter = this.users.filter(x=>
-          x.name.toLowerCase().includes(this.filterValue.trim().toLowerCase())
+          x.name.toLowerCase().includes(this.filterValue.toLowerCase()) 
         )
       }else{
         this.usersFilter = items
