@@ -10,15 +10,16 @@ import * as moment from 'moment';
 })
 export class PatientComponent implements OnInit {
   RTD: AngularFireDatabase
-  userModel: any = {}
+  userModel: any[] = []
   chatModel: any[] = []
   historyModel: any[] = []
 
+
   uid: any
 
-  displayedColumnsHistory: string[] = ['heart_rate', 'spo2', 'timestamp', 'location'];
-
-  displayedColumns: string[] = ['User', 'Message', 'Time'];
+  displayedColumnsHistory: string[] = ['timestamp', 'heart_rate', 'spo2', 'location'];
+  displayedColumnsUser: string[] = ['name', 'email', 'address','phone'];
+  displayedColumnsChat: string[] = ['user', 'message', 'timestamp'];
   constructor(private route: ActivatedRoute, db: AngularFireDatabase) {
     this.RTD = db
   }
@@ -27,9 +28,8 @@ export class PatientComponent implements OnInit {
     const routeParams = this.route.snapshot.paramMap;
     this.uid = routeParams.get('uid');
     this.RTD.list('users', ref => ref.orderByKey().equalTo(this.uid)).valueChanges().subscribe(user => {
-      this.userModel = user[0]
-      this.userModel.chat
-      var chat = this.userModel.chat
+      this.userModel = user
+      var chat = this.userModel[0].chat
       this.chatModel = Object.keys(chat).map(function (index) {
         let value = chat[index];
         return value;
@@ -38,8 +38,6 @@ export class PatientComponent implements OnInit {
 
     this.RTD.list('users/' + this.uid + '/transaction/').valueChanges().subscribe(data => {
       this.historyModel = data
-      this.historyModel.sort((a, b) => b.timestamp - a.timestamp);
-
       this.historyModel.sort((n1, n2) => {
         if (n2.timestamp > n1.timestamp) {
           return 1;
@@ -56,5 +54,9 @@ export class PatientComponent implements OnInit {
   public sendMessege(inputMessege: any) {
     var dateNow = (moment(Date.now())).format('DD/MM/yyyy HH:mm:ss')
     this.RTD.list('users/' + this.uid + '/chat/').push({ user: "doctor", message: inputMessege, timestamp: dateNow });;
+  }
+
+  public googleMap(location:any){
+    window.open("http://maps.google.com/maps?q="+location)
   }
 }
