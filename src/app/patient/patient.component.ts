@@ -9,39 +9,52 @@ import * as moment from 'moment';
   styleUrls: ['./patient.component.scss']
 })
 export class PatientComponent implements OnInit {
-  RTD:AngularFireDatabase
-  userModel:any ={}
-  chatModel:any[] = []
-  historyModel:any[] = []
+  RTD: AngularFireDatabase
+  userModel: any = {}
+  chatModel: any[] = []
+  historyModel: any[] = []
 
-  uid:any
+  uid: any
 
-  displayedColumnsHistory: string[] = ['heart_rate','spo2', 'timestamp','location'];
+  displayedColumnsHistory: string[] = ['heart_rate', 'spo2', 'timestamp', 'location'];
 
-  displayedColumns: string[] = ['User','Message', 'Time'];
-  constructor(private route: ActivatedRoute,db: AngularFireDatabase) { 
+  displayedColumns: string[] = ['User', 'Message', 'Time'];
+  constructor(private route: ActivatedRoute, db: AngularFireDatabase) {
     this.RTD = db
   }
 
   ngOnInit(): void {
     const routeParams = this.route.snapshot.paramMap;
     this.uid = routeParams.get('uid');
-    this.RTD.list('users', ref => ref.orderByKey().equalTo(this.uid)).valueChanges().subscribe(user =>{
+    this.RTD.list('users', ref => ref.orderByKey().equalTo(this.uid)).valueChanges().subscribe(user => {
       this.userModel = user[0]
       this.userModel.chat
       var chat = this.userModel.chat
-      this.chatModel = Object.keys(chat).map(function(index){
+      this.chatModel = Object.keys(chat).map(function (index) {
         let value = chat[index];
         return value;
-    });})
+      });
+    })
 
-    this.RTD.list('users/'+this.uid+'/transaction/').valueChanges().subscribe(data =>{
+    this.RTD.list('users/' + this.uid + '/transaction/').valueChanges().subscribe(data => {
       this.historyModel = data
-      this.historyModel = this.historyModel.sort((a,b) => b.timestamp - a.timestamp);
+      this.historyModel.sort((a, b) => b.timestamp - a.timestamp);
+
+      this.historyModel.sort((n1, n2) => {
+        if (n2.timestamp > n1.timestamp) {
+          return 1;
+        }
+
+        if (n2.timestamp < n1.timestamp) {
+          return -1;
+        }
+
+        return 0;
+      })
     })
   }
-  public sendMessege(inputMessege:any){
-    var dateNow =(moment(Date.now())).format('DD/MM/yyyy HH:mm:ss')
-    this.RTD.list('users/'+this.uid+'/chat/').push({ user: "doctor",message:inputMessege,timestamp:dateNow });;
+  public sendMessege(inputMessege: any) {
+    var dateNow = (moment(Date.now())).format('DD/MM/yyyy HH:mm:ss')
+    this.RTD.list('users/' + this.uid + '/chat/').push({ user: "doctor", message: inputMessege, timestamp: dateNow });;
   }
 }
