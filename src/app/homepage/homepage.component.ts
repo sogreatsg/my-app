@@ -42,16 +42,16 @@ export class HomepageComponent implements OnInit {
 
     this.usersList.valueChanges().subscribe(items => {
       this.users = []
-      items.forEach((eleme: any) => {
-        if (eleme.transaction) {
+      items.forEach((element: any) => {
+        if (element.transaction) {
           var transaction: any
-          transaction = eleme.transaction
+          transaction = element.transaction
           transaction = Object.keys(transaction).map(function (index) {
             return transaction[index];
           })
-          this.users.push({ "name": eleme.name, "heart_rate": transaction[transaction.length - 1].heart_rate, "spo2": transaction[transaction.length - 1].spo2, "timestamp": transaction[transaction.length - 1].timestamp })
+          this.users.push({ "name": element.name, "heart_rate": transaction[transaction.length - 1].heart_rate, "spo2": transaction[transaction.length - 1].spo2, "timestamp": transaction[transaction.length - 1].timestamp,"uid":element.uid })
         } else {
-          this.users.push({ "name": eleme.name, "heart_rate": "ไม่พบข้อมูล", "spo2": "ไม่พบข้อมูล", "timestamp": "ไม่พบข้อมูล" })
+          this.users.push({ "name": element.name, "heart_rate": "ไม่พบข้อมูล", "spo2": "ไม่พบข้อมูล", "timestamp": "ไม่พบข้อมูล","uid":element.uid })
         }
       })
       this.usersFilter = this.users
