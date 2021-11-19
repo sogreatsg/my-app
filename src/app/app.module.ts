@@ -12,16 +12,18 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { PatientComponent } from './patient/patient.component';
 import { RouterModule } from '@angular/router';
 import { HomepageComponent } from './homepage/homepage.component';
+import { MatTabsModule } from '@angular/material/tabs';
 @NgModule({
   imports: [
-    BrowserModule,
     AngularFireModule.initializeApp(environment.firebase),
+    BrowserModule,
     BrowserAnimationsModule,
     MatTableModule,
     MatFormFieldModule,
     MatInputModule,
     MatIconModule,
     MatDialogModule,
+    MatTabsModule,
     RouterModule.forRoot([
       { path: '', component: HomepageComponent },
       { path: 'patient/:uid', component: PatientComponent },
