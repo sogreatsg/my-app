@@ -12,7 +12,12 @@ export class PatientComponent implements OnInit {
   RTD:AngularFireDatabase
   userModel:any ={}
   chatModel:any[] = []
+  historyModel:any[] = []
+
   uid:any
+
+  displayedColumnsHistory: string[] = ['heart_rate','spo2', 'timestamp','location'];
+
   displayedColumns: string[] = ['User','Message', 'Time'];
   constructor(private route: ActivatedRoute,db: AngularFireDatabase) { 
     this.RTD = db
@@ -21,7 +26,6 @@ export class PatientComponent implements OnInit {
   ngOnInit(): void {
     const routeParams = this.route.snapshot.paramMap;
     this.uid = routeParams.get('uid');
-    
     this.RTD.list('users', ref => ref.orderByKey().equalTo(this.uid)).valueChanges().subscribe(user =>{
       this.userModel = user[0]
       this.userModel.chat
@@ -30,6 +34,11 @@ export class PatientComponent implements OnInit {
         let value = chat[index];
         return value;
     });})
+
+    this.RTD.list('users/'+this.uid+'/transaction/').valueChanges().subscribe(data =>{
+      this.historyModel = data
+      this.historyModel = this.historyModel.sort((a,b) => b.timestamp - a.timestamp);
+    })
   }
   public sendMessege(inputMessege:any){
     var dateNow =(moment(Date.now())).format('DD/MM/yyyy HH:mm:ss')
