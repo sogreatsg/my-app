@@ -18,24 +18,24 @@
   
     <table mat-table [dataSource]="usersFilter" class="mat-elevation-z8">
   
-      <ng-container matColumnDef="Name">
+      <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef> ชื่อ </th>
         <td mat-cell *matCellDef="let element" ><a [routerLink]="['/patient', element.uid]">{{element.name}}</a></td>
       </ng-container>
     
-      <ng-container matColumnDef="E-mail">
-        <th mat-header-cell *matHeaderCellDef> อีเมล </th>
-        <td mat-cell *matCellDef="let element"> {{element.email}} </td>
+      <ng-container matColumnDef="heart_rate">
+        <th mat-header-cell *matHeaderCellDef> HeartRate </th>
+        <td mat-cell *matCellDef="let element"> {{element.heart_rate}} </td>
       </ng-container>
     
-      <ng-container matColumnDef="Address">
-        <th mat-header-cell *matHeaderCellDef> ที่อยู่ </th>
-        <td mat-cell *matCellDef="let element"> {{element.address}} </td>
+      <ng-container matColumnDef="spo2">
+        <th mat-header-cell *matHeaderCellDef> SpO2 </th>
+        <td mat-cell *matCellDef="let element"> {{element.spo2}} </td>
       </ng-container>
   
-      <ng-container matColumnDef="Phone">
-        <th mat-header-cell *matHeaderCellDef> เบอร์โทรศัพท์ </th>
-        <td mat-cell *matCellDef="let element"> {{element.phone}} </td>
+      <ng-container matColumnDef="timestamp">
+        <th mat-header-cell *matHeaderCellDef> เวลา </th>
+        <td mat-cell *matCellDef="let element"> {{element.timestamp}} </td>
       </ng-container>
     
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

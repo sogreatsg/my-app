@@ -21,36 +21,50 @@ export interface PeriodicElement {
 export class HomepageComponent implements OnInit {
   title = 'my-app';
   usersList: AngularFireList<any>;
-  users :any[] = [];
-  usersFilter:any = [];
-  filterValue:any
-  
+  users: any = [];
+  usersFilter: any = [];
+  filterValue: any
+
+
   constructor(db: AngularFireDatabase) {
     this.usersList = db.list('users');
   }
 
-  displayedColumns: string[] = ['Name', 'E-mail', 'Address','Phone'];
+  displayedColumns: string[] = ['name', 'heart_rate', 'spo2', 'timestamp'];
 
-  applyFilter(event:any) {
+  applyFilter(event: any) {
     this.filterValue = (event.target as HTMLInputElement).value;
-    this.usersFilter = this.users.filter(x=>
-      x.name.toLowerCase().includes(this.filterValue.toLowerCase()) 
+    this.usersFilter = this.users.filter((x: any) =>
+      x.name.toLowerCase().includes(this.filterValue.toLowerCase())
     )
   }
   ngOnInit(): void {
 
     this.usersList.valueChanges().subscribe(items => {
-      this.users = items;
-      if(this.filterValue){
-        this.usersFilter = this.users.filter(x=>
-          x.name.toLowerCase().includes(this.filterValue.toLowerCase()) 
+      this.users = []
+      items.forEach((eleme: any) => {
+        if (eleme.transaction) {
+          var transaction: any
+          transaction = eleme.transaction
+          transaction = Object.keys(transaction).map(function (index) {
+            return transaction[index];
+          })
+          this.users.push({ "name": eleme.name, "heart_rate": transaction[transaction.length - 1].heart_rate, "spo2": transaction[transaction.length - 1].spo2, "timestamp": transaction[transaction.length - 1].timestamp })
+        } else {
+          this.users.push({ "name": eleme.name, "heart_rate": "ไม่พบข้อมูล", "spo2": "ไม่พบข้อมูล", "timestamp": "ไม่พบข้อมูล" })
+        }
+      })
+      this.usersFilter = this.users
+      if (this.filterValue) {
+        this.usersFilter = this.users.filter((x: any) =>
+          x.name.toLowerCase().includes(this.filterValue.toLowerCase())
         )
-      }else{
-        this.usersFilter = items
+      } else {
+        this.usersFilter = this.users
       }
-      
-      });
-     
+
+    });
+
   }
 
 }
