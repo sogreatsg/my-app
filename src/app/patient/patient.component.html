@@ -77,12 +77,12 @@
         </table>
         <mat-form-field style="width: 100%;" appearance="fill">
           <mat-label>ข้อความ</mat-label>
-          <input type="text" id="inputMessege" name="inputMessege" matInput #inputMessege>
-          <button matSuffix mat-flat-button style=" margin-bottom: 15px;
+          <input type="text" id="inputMessege" name="inputMessege" matInput (keydown.enter)="sendMessege(inputMessege.value)" (keydown.enter)="inputMessege.value = ''" #inputMessege>
+          <button id="sendMessege"  matSuffix mat-flat-button style=" margin-bottom: 15px;
             text-align: center;
             text-decoration: none;
             display: inline-block;
-            font-size: 16px;" (click)="sendMessege(inputMessege.value)" (click)="inputMessege.value = '' ">ส่ง</button>
+            font-size: 16px;" (click)="sendMessege(inputMessege.value)" [disabled]="!inputMessege.value" (click)="inputMessege.value = ''">ส่ง</button>
         </mat-form-field>
       </div>
     </mat-tab>
