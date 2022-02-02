@@ -37,8 +37,13 @@ export class PatientComponent implements OnInit {
     })
 
     this.RTD.list('users/' + this.uid + '/transaction/').valueChanges().subscribe(data => {
+      
       this.historyModel = data.sort((n1:any, n2:any) => {
-        return (new Date(this.strToDate(n1.timestamp)).getTime() + new Date(this.strToDate(n2.timestamp)).getTime());
+        if(moment(n1.timestamp).isBefore(moment(n2.timestamp))){
+          return 1;
+        }else{
+          return -1;
+        }
       })
     })
   }
