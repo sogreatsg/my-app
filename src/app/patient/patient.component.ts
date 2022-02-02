@@ -39,15 +39,8 @@ export class PatientComponent implements OnInit {
     this.RTD.list('users/' + this.uid + '/transaction/').valueChanges().subscribe(data => {
       this.historyModel = data
       this.historyModel.sort((n1, n2) => {
-        if (n2.timestamp > n1.timestamp) {
-          return 1;
-        }
-
-        if (n2.timestamp < n1.timestamp) {
-          return -1;
-        }
-
-        return 0;
+        
+        return (new Date(this.strToDate(n2.timestamp)).getTime() - new Date(this.strToDate(n1.timestamp)).getDate());
       })
     })
   }
@@ -58,5 +51,13 @@ export class PatientComponent implements OnInit {
 
   public googleMap(location:any){
     window.open("http://maps.google.com/maps?q="+location)
+  }
+
+   public strToDate(dtStr:any) {
+    if (!dtStr) return null
+    let dateParts = dtStr.split("/");
+    let timeParts = dateParts[2].split(" ")[1].split(":");
+    dateParts[2] = dateParts[2].split(" ")[0];
+    return (dateParts[2], dateParts[1] - 1, +dateParts[0], timeParts[0], timeParts[1], timeParts[2]);
   }
 }
